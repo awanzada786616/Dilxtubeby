@@ -1,172 +1,199 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Wasi Song Tube</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Wasi Store</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
   <style>
-    body {margin:0;padding:0;font-family:Arial,sans-serif;background: linear-gradient(to right, #2c3e50, #3498db);color:#fff;transition:background .3s,color .3s;}
-    .light {background:#f4f4f4;color:#111;}
-    header {padding:20px;text-align:center;font-size:2.5rem;background:linear-gradient(to right,#ff6a00,#ee0979);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .topbar {display:flex;justify-content:center;gap:10px;padding:15px;}
-    input {padding:10px;width:60%;max-width:400px;border:none;border-radius:8px;font-size:1rem;}
-    button {padding:10px 16px;border:none;border-radius:8px;background:#ff6a00;color:#fff;cursor:pointer;}
-    .loader {display:none;text-align:center;padding:20px;color:#ff6a00;}
-    .cards {display:flex;flex-wrap:wrap;justify-content:center;gap:20px;padding:20px;}
-    .card {width:320px;border-radius:10px;overflow:hidden;background:rgba(255,255,255,0.05);}
-    .card iframe {width:100%;height:180px;border:none;}
-    footer {padding:20px;text-align:center;font-size:0.9rem;color:#888;}
-    .whatsapp {position:fixed;bottom:20px;right:20px;background:#25D366;padding:10px 15px;border-radius:50px;color:#fff;text-decoration:none;font-weight:bold;}
-  
-    .card iframe { width: 100%; height: 180px; transition: all 0.3s ease; }
-    .card.active iframe { height: 400px; }
-    
-    .logo {
-      font-size: 2.2rem;
-      vertical-align: middle;
-      margin-right: 10px;
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to bottom right, #e0f7fa, #e3f2fd);
     }
-    .animated-title {
-      font-size: 2.5rem;
-      background: linear-gradient(90deg, #ff6a00, #ee0979, #ff6a00);
-      background-size: 200% auto;
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      animation: shine 3s linear infinite;
+    .header, .section-title {
+      text-align: center;
+      margin: 20px 0;
     }
-    @keyframes shine {
-      0% { background-position: 0% center; }
-      100% { background-position: 200% center; }
+    .header img {
+      max-width: 200px;
     }
-    
-#loadingScreen {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 9999;
-}
-#loadingMessage {
-  color: #fff;
-  font-size: 2.2rem;
-  animation: fadeInOut 3s ease-in-out forwards;
-}
-@keyframes fadeInOut {
-  0% { opacity: 0; }
-  50% { opacity: 1; }
-  100% { opacity: 0; }
-}
-
-.whatsapp {
-  position: fixed;
-  bottom: 20px;
-  left: 20px;
-  background: #25D366;
-  padding: 10px 15px;
-  border-radius: 50px;
-  color: #fff;
-  text-decoration: none;
-  font-weight: bold;
-  z-index: 1000;
-}
-</style>
-
-
-
+    .banner img {
+      width: 100%;
+      height: auto;
+    }
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      padding: 20px;
+    }
+    .product {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      padding: 15px;
+      text-align: center;
+    }
+    .product img {
+      width: 100%;
+      height: 120px;
+      object-fit: contain;
+      border-radius: 10px;
+    }
+    .price {
+      color: green;
+      font-weight: bold;
+      margin: 10px 0;
+    }
+    .buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .buttons a {
+      padding: 8px 12px;
+      border-radius: 5px;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+    }
+    .order { background-color: #28a745; }
+    .details { background-color: #007bff; }
+    .fixed-chat {
+      position: fixed;
+      bottom: 20px;
+      left: 20px;
+      z-index: 999;
+    }
+    .fixed-whatsapp {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 999;
+    }
+    .bottom-center-img {
+      position: fixed;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+    }
+    .bottom-center-img img {
+      width: 50px;
+      cursor: pointer;
+    }
+  </style>
 </head>
-
 <body>
-  <!-- Loading Screen -->
-  <div id="loadingScreen">
-    <div id="loadingMessage">Welcome to Wasi Song Tube</div>
+
+  <div class="header">
+    <img src="https://i.postimg.cc/tJFs08X2/20250617-143025.png" alt="Logo" />
   </div>
 
-  
-    <header>
-      <span class="logo">🎧</span>
-      <span class="animated-title">Wasi Song Tube</span>
-    </header>
-
-  <div class="topbar">
-    <input id="query" placeholder="Search songs..." onkeydown="if(event.key==='Enter') searchVideos()" />
-    <button onclick="searchVideos()">Search</button>
-    <button onclick="toggleTheme()">🌗 Theme</button>
+  <div class="banner">
+    <img src="https://i.postimg.cc/j2DknNXm/Picsart-25-06-17-14-47-29-257.jpg" alt="Banner" />
   </div>
-  <div id="loader" class="loader">Loading...</div>
-  <div id="cards" class="cards"></div>
-  <footer>WhatsApp: +923175768178 • Built by Wasi</footer>
-  <a class="whatsapp" href="https://wa.me/923175768178" target="_blank">💬 WhatsApp</a>
 
-  <script>
-    const apiKey = 'AIzaSyBylc48brJYEjlKgT0nfOji0f_3MI_nxIs';
-    function toggleTheme(){document.body.classList.toggle('light');}
+  <h2 class="section-title">Chromebooks</h2>
+  <div class="products">
+    <div class="product">
+      <img src="https://i.postimg.cc/RF0872dW/Acer-c720p-8-768x768.jpg" />
+      <h3>Acer C720P | 128GB Storage | 4GB RAM</h3>
+      <div class="price">Price: 13000 PKR</div>
+      <div class="buttons">
+        <a href="https://wa.me/923175768178" class="order">Order Now</a>
+        <a href="#" class="details">More Info</a>
+      </div>
+    </div>
+  </div>
 
-    async function searchVideos(queryParam) {
-      const query = queryParam || document.getElementById('query').value.trim();
-      if (!query) return alert('Please enter a search term.');
+  <h2 class="section-title">Mobile Phones</h2>
+  <div class="products">
+    <div class="product">
+      <img src="https://i.postimg.cc/vTY5MqQC/Nokia-C110-2023-14-768x768.jpg" />
+      <h3>Nokia C110 2023 | 32GB | 3GB RAM | 13MP | SIM Lock</h3>
+      <div class="price">Price: 8000 PKR</div>
+      <div class="buttons">
+        <a href="https://wa.me/923175768178" class="order">Order Now</a>
+        <a href="https://youtu.be/F2bM-sjRK-E?si=BO6lMgFJHhXGMeH5" class="details">View Details</a>
+      </div>
+    </div>
+    <div class="product">
+      <img src="https://i.postimg.cc/vHHHLRqp/Motorola-moto-g-pure-1-768x768-1.jpg" />
+      <h3>Motorola Moto G Pure | 32GB | 3GB RAM | 13MP</h3>
+      <div class="price">Price: 10400 PKR</div>
+      <div class="buttons">
+        <a href="https://wa.me/923175768178" class="order">Order Now</a>
+        <a href="https://youtu.be/zSwD1xsFVa4?si=WMZmSPzpjk6IuxAT" class="details">View Details</a>
+      </div>
+    </div>
+    <div class="product">
+      <img src="https://i.postimg.cc/nhhyPpqt/Motorola-Moto-G7-Power-1-768x768.jpg" />
+      <h3>Motorola Moto G7 Power | 32GB | 3GB RAM | 5000mAh</h3>
+      <div class="price">Price: 10999 PKR</div>
+      <div class="buttons">
+        <a href="https://wa.me/923175768178" class="order">Order Now</a>
+        <a href="https://youtu.be/Goc38jP6_n4?si=Ia9fj4Sm6bauD3xi" class="details">View Details</a>
+      </div>
+    </div>
+    <div class="product">
+      <img src="https://i.postimg.cc/kgP07Wrq/02-3-768x768-1.jpg" />
+      <h3>Samsung Galaxy A12 | 32GB | 3GB RAM | 48MP</h3>
+      <div class="price">Price: 13500 PKR</div>
+      <div class="buttons">
+        <a href="https://wa.me/923175768178" class="order">Order Now</a>
+        <a href="https://youtu.be/jO_2gzcoj1w?si=0sWYOOdpQqr9Uq1P" class="details">View Details</a>
+      </div>
+    </div>
+    <div class="product">
+      <img src="https://i.postimg.cc/VLzmZ4pS/Aquos-sense-5g-10-768x768.jpg" />
+      <h3>Sharp Aquos sense 5G | 64GB | 4GB RAM | 12MP</h3>
+      <div class="price">Price: 15000 PKR</div>
+      <div class="buttons">
+        <a href="https://wa.me/923175768178" class="order">Order Now</a>
+        <a href="https://youtu.be/vmTKu8kWha8?si=eNkWK2V2w9h3pDoa" class="details">View Details</a>
+      </div>
+    </div>
+  </div>
 
-      document.getElementById('loader').style.display='block';
-      document.getElementById('cards').innerHTML='';
+  <h2 class="section-title">UK SIM Cards</h2>
+  <div class="products">
+    <div class="product">
+      <img src="https://i.postimg.cc/1XJTj0V6/images-18.jpg" />
+      <h3>UK SIM | 3 Network | For all accounts</h3>
+      <div class="price">Price: 3500 PKR</div>
+      <div class="buttons">
+        <a href="https://wa.me/923342002756" class="order">Order Now</a>
+        <a href="#" class="details">Details on WhatsApp</a>
+      </div>
+    </div>
+    <div class="product">
+      <img src="https://i.postimg.cc/zXG4RQ4k/images-19.jpg" />
+      <h3>UK SIM | For Live (giffgaff)</h3>
+      <div class="price">Price: 2300 PKR</div>
+      <div class="buttons">
+        <a href="https://wa.me/923342002756" class="order">Order Now</a>
+        <a href="#" class="details">Details on WhatsApp</a>
+      </div>
+    </div>
+  </div>
 
-      try {
-        const res = await fetch(
-          `https://www.googleapis.com/youtube/v3/search?part=snippet&maxResults=8&type=video&q=${encodeURIComponent(query)}&key=${apiKey}`
-        );
-        const data = await res.json();
-        document.getElementById('loader').style.display='none';
-        if (!data.items || data.items.length === 0) return alert('No results found.');
+  <div class="fixed-chat">
+    <script src="//code.tidio.co/your-tidio-code.js" async></script>
+  </div>
 
-        data.items.forEach(item => {
-          const vid = item.id.videoId;
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.innerHTML = `<div onclick='setActiveCard(this.parentElement)'>
-            <iframe src="https://www.youtube.com/embed/${vid}" allowfullscreen></iframe>
-            <h4 style="padding:10px;">${item.snippet.title}</h4>
-          `;
-          document.getElementById('cards').appendChild(card);
-        });
-      } catch (err) {
-        console.error(err);
-        document.getElementById('loader').style.display = 'none';
-        alert('An error occurred. Please try again.');
-      }
-    }
+  <div class="fixed-whatsapp">
+    <a href="https://wa.me/923175768178">
+      <img src="https://img.icons8.com/color/48/000000/whatsapp--v1.png" />
+    </a>
+  </div>
 
-    // Load trending default searches
-    
-window.onload = () => {
-  setTimeout(() => {
-    document.getElementById('loadingScreen').style.display = 'none';
-  }, 3000);
-
-      searchVideos('Latest Pakistani Songs');
-    };
-  
-    // Function to set clicked card as active
-    function setActiveCard(cardElement) {
-      document.querySelectorAll('.card').forEach(card => {
-        card.classList.remove('active');
-      });
-      cardElement.classList.add('active');
-    }
-    </script>
-
-
-  <script src="//code.tidio.co/v6flfnabuyblfkrginqkly19wazdskhc.js" async>
-    // Function to set clicked card as active
-    function setActiveCard(cardElement) {
-      document.querySelectorAll('.card').forEach(card => {
-        card.classList.remove('active');
-      });
-      cardElement.classList.add('active');
-    }
-    </script>
-
+  <div class="bottom-center-img">
+    <a href="https://dilxtubeby.vercel.app" target="_blank">
+      <img src="https://i.postimg.cc/0ydRvW7c/iphone-x-600x598.png" alt="Shortcut" />
+    </a>
+  </div>
 </body>
 </html>
